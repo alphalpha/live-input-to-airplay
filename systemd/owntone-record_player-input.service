@@ -1,0 +1,21 @@
+[Unit]
+Description=Feed USB audio (hw:1,0) to OwnTone FIFO
+After=sound.target network-online.target owntone.service
+Requires=owntone.service
+PartOf=owntone.service
+
+[Service]
+# Ensure the directory exists with correct perms/ownership
+ExecStartPre=/usr/bin/install -d -m 0770 /srv/music
+# Recreate FIFO on start (safe if it already exists)
+ExecStartPre=/usr/bin/mkfifo -m 660 /srv/music/record_player.pcm
+# Capture 44.1kHz 16-bit stereo and pipe into FIFO
+ExecStart=/bin/bash -lc '/usr/bin/arecord -D hw:CARD=CODEC,DEV=0 -f cd | /usr/bin/tee /srv/music/record_player.pcm > /dev/null'
+Restart=on-failure
+RestartSec=1
+StartLimitBurst=10
+# Clean up FIFO on stop (optional)
+ExecStopPost=/usr/bin/rm -f -r /srv/music
+
+[Install]
+WantedBy=multi-user.target

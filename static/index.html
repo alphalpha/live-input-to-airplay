@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Record Player</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b0c10; --card:#16181d; --muted:#2a2d35; --border:#242833;
+      --ok:#19c37d; --warn:#9a1c1c; --text:#eaeaea; --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      padding:20px;
+    }
+
+    h1{margin-bottom:16px;font-size:1.4rem;font-weight:600;}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .status{
+      display:grid;
+      grid-template-columns:1fr auto;
+      align-items:center;
+      gap:16px;
+    }
+
+    .kv{
+      display:grid;
+      grid-template-columns:auto auto;
+      gap:6px 12px;
+      color:var(--text);
+      font-size:0.95rem;
+    }
+    .kv b{color:var(--text);font-weight:600;}
+
+    .master{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      justify-content:flex-end;
+    }
+    .master span.label{font-weight:600;}
+
+    .section-title{margin:20px 0 8px;font-weight:700;}
+
+    .outputs{margin-top:12px;}
+    .output-row{
+      display:grid;
+      grid-template-columns:1fr auto auto 200px;
+      gap:12px;
+      align-items:center;
+      padding:10px 0;
+      border-top:1px solid var(--border);
+    }
+    .output-row:first-child{border-top:0;}
+    .output-name{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .default-wrap{display:flex;align-items:center;gap:6px;user-select:none;font-size:0.9rem;color:var(--text);}
+
+    /* Toggle switch */
+    .switch{position:relative;display:inline-block;width:50px;height:28px;}
+    .switch input{display:none;}
+    .slider{
+      position:absolute;cursor:pointer;inset:0;
+      background:var(--muted);transition:.25s;border-radius:28px;
+    }
+    .slider:before{
+      position:absolute;content:"";height:22px;width:22px;
+      left:3px;bottom:3px;background:var(--text);
+      transition:.25s;border-radius:50%;
+      box-shadow:0 1px 2px rgba(0,0,0,.4);
+    }
+    .switch input:checked + .slider{background:var(--ok);}
+    .switch input:checked + .slider:before{transform:translateX(22px);}
+
+    .vol{width:200px;}
+
+    @media(max-width:700px){
+      .output-row{grid-template-columns:1fr auto;}
+      .default-wrap{order:3;}
+      .switch{order:2;justify-self:end;}
+      .vol{order:4;grid-column:1 / -1;width:100%;}
+      .status{grid-template-columns:1fr;}
+      .master{justify-content:flex-start;}
+    }
+  </style>
+</head>
+<body>
+  <h1>Record Player</h1>
+
+  <div class="card" style="margin-bottom:18px;">
+    <div class="status">
+      <div class="kv">
+        <div>Owntone Server:</div><b id="coreStatus">?</b>
+        <div>Audio In Pipe:</div><b id="pipeStatus">?</b>
+      </div>
+      <div class="master">
+        <label class="switch">
+          <input type="checkbox" id="masterToggle" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div id="outputsSection" class="card outputs" style="display:none;">
+    <div class="section-title">Outputs</div>
+    <div id="outputsWrap"></div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

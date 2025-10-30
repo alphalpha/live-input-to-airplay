@@ -1,0 +1,18 @@
+# /etc/systemd/system/record-player-web.service
+[Unit]
+Description=Record Player Web
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+EnvironmentFile=-/etc/record-player/web.env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=
+ExecStart=/bin/sh -lc 'exec "$VENV_PY" -m uvicorn --app-dir "$APP_ROOT" app:app --host "$HOST" --port "$PORT"'
+
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target
+
