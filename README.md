@@ -163,3 +163,36 @@ to
 ```
 uncompressed_alac = true
 ```
+
+## Homekit
+
+The Homekit systemd service relies on an environment file located at:
+
+```
+/etc/record-player/homekit.env
+```
+Create the file with the following contents:
+
+```ini
+# Path to your Record Player app repo
+APP_ROOT=/path-to-app
+
+# Python interpreter from your virtual environment
+VENV_PY=/path/.venv/bin/python3
+
+# Where the backend (web service) API lives
+BACKEND_ENDPOINT=http://127.0.0.1:8080/api
+
+# IP address for HomeKit accessory to bind on your LAN
+HAP_ADDRESS=host-ip-address
+
+# Directory for HomeKit pairing data
+HOMEKIT_DATA_DIR=/path-to-data-folder
+```
+
+Deploy all services including the Homekit service permanently:
+
+```bash
+chmod +x tools/deploy-systemd.sh
+./tools/deploy-systemd.sh --with-homekit
+```

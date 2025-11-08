@@ -1,0 +1,19 @@
+# /etc/systemd/system/record-player-homekit.service
+[Unit]
+Description=Record Player HomeKit Bridge
+After=network-online.target avahi-daemon.service
+Wants=network-online.target avahi-daemon.service
+
+[Service]
+EnvironmentFile=-/etc/record-player/homekit.env
+Environment=PYTHONUNBUFFERED=1
+
+ExecStart=
+ExecStart=/bin/sh -lc "exec \"$VENV_PY\" \"$APP_ROOT/homekit.py\""
+
+Restart=on-failure
+RestartSec=2
+User=root
+
+[Install]
+WantedBy=multi-user.target
